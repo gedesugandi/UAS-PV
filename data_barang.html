@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Aplikasi Kasir Sederhana</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+      <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Data Barang</h5>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                  <tr>
+                                    <th scope="col">Kode Barang</th>
+                                    <th scope="col">Nama Barang</th>
+                                    <th scope="col">Jumlah Stok</th>
+                                    <th scope="col">Harga</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="daftar_barang">
+                                </tbody>
+                              </table>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <script>
+        const electron = require("electron");
+        const {ipcRenderer} = electron;
+        ipcRenderer.send("appointment:request:listBarang");
+        ipcRenderer.on("appointment:response:listBarang", (event, appoinments) => {
+            const listDiv = document.getElementById("daftar_barang");
+            appoinments.forEach(appoinment => {
+                const appointmentDive = document.createElement("tr");
+
+                const KodeBarang = document.createElement("td");
+                KodeBarang.innerHTML = `${appoinment.kode_barang}`;
+
+                const NamaBarang = document.createElement("td");
+                NamaBarang.innerHTML = `${appoinment.nama_barang}`;
+
+                const HargaBarang = document.createElement("td");
+                HargaBarang.innerHTML = `Rp ${parseInt(appoinment.harga).toLocaleString()}`;
+
+                const JumlahBarang = document.createElement("td");
+                JumlahBarang.innerHTML = `${appoinment.jumlah_barang}`;
+                
+                appointmentDive.appendChild(KodeBarang);
+                appointmentDive.appendChild(NamaBarang);
+                appointmentDive.appendChild(HargaBarang);
+                appointmentDive.appendChild(JumlahBarang);
+                listDiv.append(appointmentDive);
+            })
+            
+        });
+      </script>
+  </body>
+  </html>
+  

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Aplikasi Kasir Sederhana</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+      <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Tambah Data Barang</h5>
+                            <div class="col-md-12">
+                                <div class="clear pd-10"></div>
+                                <form id="form_tambah_barang">
+                                    <div class="form-group row">
+                                      <label for="staticEmail" class="col-sm-4 col-form-label text-inputs">Kode Barang</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" name="kode_barang" class="form-control kode_barang" id="staticEmail" required="yes" >
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label for="inputPassword" class="col-sm-4 col-form-label text-inputs">Nama Barang</label>
+                                      <div class="col-sm-8">
+                                        <input type="text" name="nama_barang" class="form-control nama_barang" id="inputPassword" required>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-inputs">Harga Barang</label>
+                                        <div class="col-sm-7">
+                                          <input type="text" name="harga" class="form-control harga" id="inputPassword" required >
+                                        </div>
+                                      </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label text-inputs">Jumlah Stok</label>
+                                        <div class="col-sm-5">
+                                            <input type="number" name="jumlah_barang" class="form-control" minlength="0" id="jumlah_barang" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <button type="submit" id="button" class="btn btn-info btn-block">Simpan</button>
+                                        </div>
+                                    </div>
+                                </form>
+                             </div>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <script>
+        const electron = require("electron");
+        const{ipcRenderer} = electron;
+
+        const form  = document.getElementById("form_tambah_barang");
+        const penampungData = {};
+        
+        form.addEventListener("submit", event =>{
+            event.preventDefault();
+
+            for(let i=0; i < form.elements.length; i++){
+                if(form.elements[i].type !== "submit")
+                    penampungData[form.elements[i].name] = form.elements[i].value;
+            }
+
+            ipcRenderer.send("appointment:simpanBarang", penampungData);
+        });
+    </script>
+  </body>
+  </html>
+  
